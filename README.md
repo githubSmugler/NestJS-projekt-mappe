@@ -9,7 +9,6 @@ Dette projekt er en NestJS-applikation, der integrerer med en vejr-API for at he
 - Henter vejropdateringer fra en ekstern API.
 - Gemmer vejrinformation (både lokalitet og aktuelle data) i en SQLite-database.
 - Planlagt dataindsamling via en scheduler hvert 5. minut.
-- API-dokumentation og endpoints implementeret via NestJS.
 
 ---
 
