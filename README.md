@@ -8,7 +8,7 @@ Dette projekt er en NestJS-applikation, der integrerer med en vejr-API for at he
 
 - Henter vejropdateringer fra en ekstern API.
 - Gemmer vejrinformation (både lokalitet og aktuelle data) i en SQLite-database.
-- Planlagt dataindsamling via en sheduler hvert 5. minut.
+- Planlagt dataindsamling via en scheduler hvert 5. minut.
 - API-dokumentation og endpoints implementeret via NestJS.
 
 ---
@@ -17,17 +17,32 @@ Dette projekt er en NestJS-applikation, der integrerer med en vejr-API for at he
 
 ### Forudsætninger
 
-1. **Node.js** installeret (version 16 eller højere anbefales).
-2. **Git** installeret.
-3. **SQLite-database** (følger med projektet).
-4. **Powershell** installeret
+### Forudsætninger for at afvikle projektet lokalt
+**Node.js:** Version 16 eller højere anbefales. Kan downloades fra Node.js officielle hjemmeside.
+  
+    **npm install** kommando skal afvikles for at indstallere projektets afhængigheder fra package.json filen
+
+**Git:** Anvendes til at klone projektet og administrere versionsstyring. Kan downloades fra Gits officielle hjemmeside.
+
+**SQLite-database:** Projektet bruger SQLite som database. Databasefilen database.sqlite oprettes automatisk ved første opstart.
+
+**Powershell eller en tilsvarende terminal:**
+På Windows: Powershell anbefales.
+På macOS/Linux: Standard terminal kan bruges.
+
+**Internetforbindelse:** Nødvendigt for at hente afhængigheder fra npm og til at foretage API-kald til WeatherAPI.
+
+**WeatherAPI-nøgle:** En API-nøgle følger med projektet i .env filen.
+  **Vejr APIet som benyttes er dette: https://www.weatherapi.com/** 
+
+Projektet afvikles ved at hente kildekoden fra github. Herefter navigeres til projektets rod mappe: ...\NestJS projekt mappe\weather-app. Herfra kan projektet startes med en powershell kommando ved at afvikle kommandoen **npm run start**
 
 ## 🛠️Projektstruktur
 Følgende er hovedkomponenterne i projektet:
 
 - **`src/weather-job.service.ts`**: Ansvarlig for at køre de planlagte opgaver, hente data fra API'et og gemme dem i databasen.  
 - **`src/weather.service.ts`**: Håndterer API-kald til WeatherAPI.  
-- **`src/weather.entity.ts`**: Definerer databasen entitet for gemte vejrdata.  
+- **`src/weather.entity.ts`**: Definerer databasens entitet for gemte vejrdata.  
 - **`src/app.module.ts`**: Applikationens hovedmodul, hvor alle services og moduler registreres.  
 
 
@@ -81,4 +96,54 @@ Følgende data gemmes i databasen:
 - `uv`: UV-indeks.
 - `gust_mph`: Vindstød i mph.
 - `gust_kph`: Vindstød i kph.
+
+## 🏛️ Arkitektur og Dataflow
+
+Projektet er bygget på **NestJS**, et framework baseret på TypeScript. Arkitekturen følger en modulær struktur, der adskiller ansvar og letter vedligeholdelse og udvidelse.
+
+### Dataflow
+
+1. **Tidsplan og API-kald**:  
+   - `WeatherJobService` kører periodiske opgaver ved hjælp af en **`setInterval`-funktion**, som initierer et kald til **WeatherAPI** gennem `WeatherService` hvert 5. minut.
+
+2. **Modtagelse af data**:  
+   - API'et returnerer en JSON-struktur, der indeholder både **lokationsdata** og **aktuelle vejrdata**.
+
+3. **Validering og behandling**:  
+   - `WeatherJobService` validerer og parser dataene fra API'et.
+   - Kun relevante felter fra API-svaret gemmes for at reducere unødvendige data.
+
+4. **Skrivning i databasen**:  
+   - `WeatherJobService` bruger `TypeORM` til at gemme dataene i databasen via `WeatherEntity`.
+   - Felter fra både lokationsdata og aktuelle vejrdata bliver mappet til entiteten og derefter persisteret i SQLite-databasen.
+
+5. **Logging**:  
+   - Alle nøgleprocesser, som succesfulde API-kald, datavalidering, og gemning i databasen, bliver logget via NestJS' **Logger**-modul. Eventuelle fejl håndteres og logges med detaljerede fejlbeskeder.
+
+### Dataflowdiagram
+
+```plaintext
++-------------------+
+| WeatherJobService |
++-------------------+
+         |
+         v
++-------------------+
+|  WeatherService   |
++-------------------+
+         |
+         v
++-------------------+
+| WeatherAPI (Ekstern) |
++-------------------+
+         |
+         v
++-------------------+
+|  WeatherEntity    |
++-------------------+
+         |
+         v
++-------------------+
+|    SQLite DB      |
++-------------------+
 
