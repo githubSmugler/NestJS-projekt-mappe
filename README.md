@@ -46,7 +46,7 @@ Følgende er hovedkomponenterne i projektet:
 
 
 ## 🛠️ Database: Entiteter og felter
-Projektet bruger en SQLite-database (weather.db) til at gemme data. For at se de gemte data kan du bruge en SQLite-browser såsom:
+Projektet bruger en SQLite-database (weather.sqlite) til at gemme data. For at se de gemte data kan du bruge en SQLite-browser såsom:
 
 DB Browser for SQLite - https://sqlitebrowser.org/
 
