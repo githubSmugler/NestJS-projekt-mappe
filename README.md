@@ -19,9 +19,13 @@ Dette projekt er en NestJS-applikation, der integrerer med en vejr-API for at he
 ### Forudsætninger for at afvikle projektet lokalt
 **Node.js:** Version 16 eller højere anbefales. Kan downloades fra Node.js officielle hjemmeside.
   
-    **npm install** kommando skal afvikles for at indstallere projektets afhængigheder fra package.json filen
+    **npm install @nestjs/typeorm typeorm** kommando skal afvikles for at indstallere projektets afhængigheder fra package.json filen
 
 **Git:** Anvendes til at klone projektet og administrere versionsstyring. Kan downloades fra Gits officielle hjemmeside.
+ 
+  **projektet clones fra denne adresse: https://github.com/githubSmugler/NestJS-projekt-mappe.git**
+  
+  **git clone kommando: git clone https://github.com/githubSmugler/NestJS-projekt-mappe.git**
 
 **SQLite-database:** Projektet bruger SQLite som database. Databasefilen database.sqlite oprettes automatisk ved første opstart.
 
